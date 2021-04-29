@@ -1,29 +1,5 @@
 @import "../../globalStyles/colors.scss";
 
-* {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box
-}
-
-body {
-  background-color: $background;
-}
-
-input[type="password"],
-input[type="email"] {
-  border: 1px solid $primaryLight;
-  line-height: 40px;
-  border-radius: 4px;
-  padding: 0 40px 0 8px;
-  // outline: none;
-
-  &:focus {
-    outline-color: $primaryLight
-  }
-}
 
 button {
   background-color: $primary;
@@ -40,9 +16,7 @@ button {
   }
   
   &:disabled {
-    // background-color: $disabledBackground;
-    // color: $disabledColor;
-
+    
     &:hover {
       opacity: 1;
     }
@@ -54,23 +28,6 @@ button {
   flex-direction: column;
   height: 100vh;
   justify-content: space-between;
-
-  .header {
-    background-color: $primary;
-    border-top: 40px solid $primaryDark;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    img {
-      margin-top: 40px;
-    }
-
-    h1 {
-      color: $white;
-      margin: 16px 0 40px;
-    }
-  }
 
   .form {
     display: flex;
@@ -89,26 +46,6 @@ button {
       text-transform: uppercase;
     }
 
-    .inputWrap {
-      margin-top: 16px;
-      display: flex;
-      flex-direction: row;
-      position: relative;
-
-      input {
-        flex-grow: 1;
-      }
-
-      .status {
-        position: absolute;
-        right: 8px;
-        font-size: 12px;
-
-        cursor: help
-      }
-
-    }
-
     .submit {
       margin-top: 32px
     }
@@ -125,28 +62,5 @@ button {
         text-decoration: underline;
       }
     }
-
-    .errorWrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      
-
-      .spinner {
-        display: none;
-        margin-top: 30px;
-      }
-
-      .error {
-        display: none;
-        margin-top: 30px;
-        color: $primaryLight
-      }
-    }
-  }
-
-  .footer {
-    background-color: $primary;
-    height: 48px;
   }
 }
