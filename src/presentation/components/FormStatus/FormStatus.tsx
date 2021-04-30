@@ -10,11 +10,15 @@ type Displays = {
 type Props = Displays
 
 const FormStatus: React.FC<Props> = (props: Props) => (
-  <div className={Styles.errorWrap}>
-    <Spinner className={`${Styles.spinner} ${props.displaySpinner ? Styles.visible : ''}`}/>
-    <span className={`${Styles.error} ${props.displayError ? Styles.visible : ''}`}>
-      Erro
-    </span>
+  <div data-testid="error-wraper" className={Styles.errorWrap}>
+    { 
+      props.displaySpinner 
+      && <Spinner className={Styles.spinner}/>
+    }
+    { 
+      props.displayError 
+      && <span className={Styles.error}> Erro </span>
+    }
   </div>
 )
 

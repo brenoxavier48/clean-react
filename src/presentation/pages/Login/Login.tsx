@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Styles from './login-styles.scss'
 import { 
   LoginHeader, 
@@ -8,6 +8,10 @@ import {
 } from '@/presentation/components'
 
 const Login: React.FC = () => {
+
+  const [ displayError, setDisplayError] = useState(false)
+  const [ displaySpinner, setDisplaySpinner] = useState(false)
+
   return (
     <div className={Styles.login}>
       <LoginHeader />
@@ -23,8 +27,8 @@ const Login: React.FC = () => {
         </button>
         <span className={Styles.link}>Criar conta</span>
         <FormStatus 
-          displayError={true}
-          displaySpinner={true}
+          displayError={displayError}
+          displaySpinner={displaySpinner}
         />
       </form>
       <Footer />
