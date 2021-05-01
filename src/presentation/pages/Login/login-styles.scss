@@ -16,8 +16,8 @@ button {
   }
   
   &:disabled {
-    
-    background-color: $disabled;
+    color: $disabledColor;
+    background-color: $disabledBackground;
 
     &:hover {
       opacity: 1;
