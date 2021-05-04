@@ -20,17 +20,25 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
   const [ emailInput, setEmailInput] = useState('')
   const [ passwordInput, setPasswordInput] = useState('')
 
-  const handleChangeInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailInput((currentValue: string) => event.target.value)
   } 
 
-  const validationObjectFactory = () => ({
-    email: emailInput
-  })
+  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordInput((currentValue: string) => event.target.value)
+  } 
 
   useEffect(() => {
-    validation.validate(validationObjectFactory())
+    validation.validate({
+      email: emailInput,
+    })
   }, [emailInput])
+
+  useEffect(() => {
+    validation.validate({
+      password: passwordInput,
+    })
+  }, [passwordInput])
 
   return (
     <div className={Styles.login}>
@@ -42,9 +50,15 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
           name="email" 
           placeholder="Digite seu e-mail" 
           value={emailInput}
-          onChange={handleChangeInputEmail}
+          onChange={handleChangeEmail}
         />
-        <Input type="password" name="password" placeholder="Digite sua senha" />
+        <Input 
+          type="password" 
+          name="password" 
+          placeholder="Digite sua senha" 
+          value={passwordInput}
+          onChange={handleChangePassword}
+        />
         <button 
           data-testid="submit-button"
           type="submit"

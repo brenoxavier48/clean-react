@@ -40,12 +40,21 @@ describe('Login component', () => {
     expect(submitButton).toBeDisabled()
   })
 
-  test('Should call validation with correct value', async () => {
+  test('Should call validation with correct email value', async () => {
     const { validationSpy } = makeSut()
     const emailInput = screen.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: 'any_email' } })
     expect(validationSpy.input).toEqual({
       email: 'any_email'
+    })
+  })
+
+  test('Should call validation with correct password value', async () => {
+    const { validationSpy } = makeSut()
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: 'any_password' } })
+    expect(validationSpy.input).toEqual({
+      password: 'any_password'
     })
   })
 })
