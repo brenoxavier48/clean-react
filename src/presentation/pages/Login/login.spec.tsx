@@ -1,7 +1,8 @@
 import React from 'react'
+import faker from 'faker'
 import "@testing-library/jest-dom"
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
-import { ValidationSpy } from '@/presentation/test/mock-validation'
+import { ValidationSpy } from '@/presentation/test/'
 import Login from './Login'
 
 type SutTypes = {
@@ -31,20 +32,22 @@ describe('Login component', () => {
   })
 
   test('Should call validation with correct email value', async () => {
+    const email = faker.internet.email()
     const { validationSpy } = makeSut()
     const emailInput = screen.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any_email' } })
+    fireEvent.input(emailInput, { target: { value: email } })
     expect(validationSpy.input).toEqual({
-      email: 'any_email'
+      email: email
     })
   })
 
   test('Should call validation with correct password value', async () => {
+    const password = faker.internet.password()
     const { validationSpy } = makeSut()
     const passwordInput = screen.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any_password' } })
+    fireEvent.input(passwordInput, { target: { value: password } })
     expect(validationSpy.input).toEqual({
-      password: 'any_password'
+      password: password
     })
   })
 })

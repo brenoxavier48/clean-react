@@ -1,6 +1,6 @@
 import { Validation } from '@/presentation/protocols/Validation'
 
-class ValidationSpy implements Validation {
+export class ValidationSpy implements Validation {
   errorMessage: string
   input: Object
 
