@@ -1,22 +1,12 @@
 import React from 'react'
 import "@testing-library/jest-dom"
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
-import { Validation } from '@/presentation/protocols/validation'
+import { ValidationSpy } from '@/presentation/test/mock-validation'
 import Login from './Login'
 
 type SutTypes = {
   sut: RenderResult
   validationSpy: ValidationSpy
-}
-
-class ValidationSpy implements Validation {
-  errorMessage: string
-  input: Object
-
-  validate(input: Object): boolean {
-    this.input = input
-    return true
-  }
 }
 
 const makeSut = (): SutTypes => {
