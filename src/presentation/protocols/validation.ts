@@ -1,3 +1,8 @@
+export type ValidationResult = {
+  hasError: boolean,
+  errorMessage: string
+}
+
 export interface Validation {
-  validate (input: Object): boolean
+  validate (fieldName: string, fieldValue: string): ValidationResult
 }
