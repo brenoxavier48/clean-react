@@ -40,9 +40,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('email', emailInput)
     
-    return () => {
-      console.log(emailInput)
-      setEmailValidation(makeValidationResult(hasError, errorMessage))}
+    return () => setEmailValidation(makeValidationResult(hasError, errorMessage))
   }, [emailInput])
 
   useEffect(() => {

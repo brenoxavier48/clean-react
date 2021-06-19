@@ -2,22 +2,27 @@ import React from 'react'
 import Styles from './formStatus.scss'
 import Spinner from '@/presentation/components/Spinner/Spinner'
 
+type error = {
+  shouldDisplay: boolean,
+  message: string
+}
+
 type Displays = {
-  displayError: boolean
+  errorState: error
   displaySpinner: boolean
 }
 
 type Props = Displays
 
-const FormStatus: React.FC<Props> = (props: Props) => (
+const FormStatus: React.FC<Props> = ({ errorState, displaySpinner }: Props) => (
   <div data-testid="error-wraper" className={Styles.errorWrap}>
     { 
-      props.displaySpinner 
+      displaySpinner 
       && <Spinner className={Styles.spinner}/>
     }
     { 
-      props.displayError 
-      && <span className={Styles.error}> Erro </span>
+      errorState.shouldDisplay 
+      && <span className={Styles.error}> { errorState.message } </span>
     }
   </div>
 )
