@@ -50,13 +50,13 @@ describe('Login component', () => {
     expect(validationSpy.fieldValue).toBe(password)
   })
 
-  // test('Should shows email error message if validation fails', async () => {
-  //   const password = faker.internet.password()
-  //   const { validationSpy } = makeSut()
-  //   const passwordInput = screen.getByTestId('password')
-  //   fireEvent.input(passwordInput, { target: { value: password } })
-  //   expect(validationSpy.validate).toHaveBeenCalledWith({
-  //     password: password
-  //   })
-  // })
+  test('Should shows email error message if validation fails', async () => {
+    const email = faker.internet.email()
+    const { validationSpy } = makeSut()
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: email } })
+    const emailStatus = screen.getByTestId('email-status')
+    expect(emailStatus.title).toBe(validationSpy.errorMessage)
+    expect(emailStatus.textContent).toBe('🔴')
+  })
 })
