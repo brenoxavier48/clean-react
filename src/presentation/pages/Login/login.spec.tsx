@@ -81,9 +81,19 @@ describe('Login component', () => {
     expect(passwordStatus.textContent).toBe('🔴')
   })
 
-  test('Shouldn\'t show any message if validation doesn\'t fail', async () => {
+  test('Shouldn\'t show any message if email validation doesn\'t fail', async () => {
+    const email = faker.internet.email()
+    makeSut(false)
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: email } })
+    const emailStatus = screen.getByTestId('email-status')
+    expect(emailStatus.title).toBe('')
+    expect(emailStatus.textContent).toBe('')
+  })
+
+  test('Shouldn\'t show any message if password validation doesn\'t fail', async () => {
     const password = faker.internet.password()
-    const { validationSpy } = makeSut(false)
+    makeSut(false)
     const passwordInput = screen.getByTestId('password')
     fireEvent.input(passwordInput, { target: { value: password } })
     const passwordStatus = screen.getByTestId('password-status')
