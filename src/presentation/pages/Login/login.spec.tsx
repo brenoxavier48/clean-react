@@ -26,6 +26,16 @@ describe('Login component', () => {
     expect(errorWrap.childElementCount).toBe(0)
   })
 
+  test('Ensure Login component inputs does\'t show message error at the beginning', async () => {
+    makeSut()
+    const emailStatus = screen.getByTestId('email-status')
+    expect(emailStatus.title).toBe('')
+    expect(emailStatus.textContent).toBe('')
+    const passwordStatus = screen.getByTestId('password-status')
+    expect(passwordStatus.title).toBe('')
+    expect(passwordStatus.textContent).toBe('')
+  })
+
   test('Ensure submit button is disabled at the begging', async () => {
     makeSut()
     const submitButton = screen.getByTestId('submit-button')
@@ -59,4 +69,5 @@ describe('Login component', () => {
     expect(emailStatus.title).toBe(validationSpy.errorMessage)
     expect(emailStatus.textContent).toBe('🔴')
   })
+
 })
