@@ -12,6 +12,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
+  
   return {
     sut: render(<Login validation={validationSpy}/>),
     validationSpy
@@ -36,9 +37,8 @@ describe('Login component', () => {
     const { validationSpy } = makeSut()
     const emailInput = screen.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: email } })
-    expect(validationSpy.input).toEqual({
-      email: email
-    })
+    expect(validationSpy.fieldName).toBe('email')
+    expect(validationSpy.fieldValue).toBe(email)
   })
 
   test('Should call validation with correct password value', async () => {
@@ -46,8 +46,17 @@ describe('Login component', () => {
     const { validationSpy } = makeSut()
     const passwordInput = screen.getByTestId('password')
     fireEvent.input(passwordInput, { target: { value: password } })
-    expect(validationSpy.input).toEqual({
-      password: password
-    })
+    expect(validationSpy.fieldName).toBe('password')
+    expect(validationSpy.fieldValue).toBe(password)
   })
+
+  // test('Should shows email error message if validation fails', async () => {
+  //   const password = faker.internet.password()
+  //   const { validationSpy } = makeSut()
+  //   const passwordInput = screen.getByTestId('password')
+  //   fireEvent.input(passwordInput, { target: { value: password } })
+  //   expect(validationSpy.validate).toHaveBeenCalledWith({
+  //     password: password
+  //   })
+  // })
 })
