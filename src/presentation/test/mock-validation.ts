@@ -2,16 +2,17 @@ import { Validation, ValidationResult } from '@/presentation/protocols/Validatio
 import faker from 'faker'
 
 export class ValidationSpy implements Validation {
-  errorMessage: string = faker.random.words()
+  errorMessage: string 
+  hasError: boolean 
   fieldName: string
   fieldValue: string
 
   validate(fieldName: string, fieldValue: string): ValidationResult {
     this.fieldName = fieldName
     this.fieldValue = fieldValue
-
+    
     return {
-      hasError: true,
+      hasError: this.hasError,
       errorMessage: this.errorMessage
     }
   }

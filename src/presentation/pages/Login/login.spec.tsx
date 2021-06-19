@@ -10,9 +10,10 @@ type SutTypes = {
   validationSpy: ValidationSpy
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (validationHasError?: boolean): SutTypes => {
   const validationSpy = new ValidationSpy()
-  
+  validationSpy.errorMessage = faker.random.words()
+  validationSpy.hasError = validationHasError
   return {
     sut: render(<Login validation={validationSpy}/>),
     validationSpy
@@ -62,12 +63,32 @@ describe('Login component', () => {
 
   test('Should shows email error message if validation fails', async () => {
     const email = faker.internet.email()
-    const { validationSpy } = makeSut()
+    const { validationSpy } = makeSut(true)
     const emailInput = screen.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: email } })
     const emailStatus = screen.getByTestId('email-status')
     expect(emailStatus.title).toBe(validationSpy.errorMessage)
     expect(emailStatus.textContent).toBe('🔴')
+  })
+
+  test('Should shows password error message if validation fails', async () => {
+    const password = faker.internet.password()
+    const { validationSpy } = makeSut(true)
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: password } })
+    const passwordStatus = screen.getByTestId('password-status')
+    expect(passwordStatus.title).toBe(validationSpy.errorMessage)
+    expect(passwordStatus.textContent).toBe('🔴')
+  })
+
+  test('Shouldn\'t show any message if validation doesn\'t fail', async () => {
+    const password = faker.internet.password()
+    const { validationSpy } = makeSut(false)
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: password } })
+    const passwordStatus = screen.getByTestId('password-status')
+    expect(passwordStatus.title).toBe('')
+    expect(passwordStatus.textContent).toBe('')
   })
 
 })
