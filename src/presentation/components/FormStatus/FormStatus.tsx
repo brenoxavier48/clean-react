@@ -18,7 +18,7 @@ const FormStatus: React.FC<Props> = ({ errorState, displaySpinner }: Props) => (
   <div data-testid="error-wraper" className={Styles.errorWrap}>
     { 
       displaySpinner 
-      && <Spinner className={Styles.spinner}/>
+      && <Spinner className={Styles.spinner} data-testid="spinner" />
     }
     { 
       errorState.shouldDisplay 

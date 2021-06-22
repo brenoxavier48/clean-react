@@ -38,33 +38,36 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     setPasswordInput((currentValue: string) => event.target.value)
   } 
 
-  const cleanValidation = (setStateValidation: React.Dispatch<React.SetStateAction<ValidationResult>>, validationResult: ValidationResult) => {
-    return () => {
-      setStateValidation(validationResult)
-      setDisabledSubmitButton(passwordValidation.hasError && emailValidation.hasError)
-    }
-  }
+  const handleSubmitClick = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
+    setDisplaySpinner(true)
+  } 
+
+  const cleanValidationEffectFactory = (
+    setStateValidation: React.Dispatch<React.SetStateAction<ValidationResult>>, 
+    validationResult: ValidationResult
+  ) => () => {
+    setStateValidation(validationResult)
+    setDisabledSubmitButton(passwordValidation.hasError && emailValidation.hasError)
+  }
+  
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('email', emailInput)
     
-    return cleanValidation(setEmailValidation, makeValidationResult(hasError, errorMessage))
+    return cleanValidationEffectFactory(setEmailValidation, makeValidationResult(hasError, errorMessage))
   }, [emailInput])
 
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('password', passwordInput)
     
-    return cleanValidation(setPasswordValidation, makeValidationResult(hasError, errorMessage))
+    return cleanValidationEffectFactory(setPasswordValidation, makeValidationResult(hasError, errorMessage))
   }, [passwordInput])
-
-  // useEffect(() => {
-  //   return () => setDisabledSubmitButton(passwordValidation.hasError && emailValidation.hasError)
-  // }, [passwordInput, emailInput])
 
   return (
     <div className={Styles.login}>
       <LoginHeader />
-      <form className={Styles.form}>
+      <form className={Styles.form} onSubmit={handleSubmitClick}>
         <h2>Login</h2>
         <InputWithValidation 
           type="email" 

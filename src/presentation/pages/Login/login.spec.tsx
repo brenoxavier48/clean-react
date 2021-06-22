@@ -111,4 +111,16 @@ describe('Login component', () => {
     expect(submitButton).toBeEnabled()
   })
 
+  test('Should show loading on submit', async () => {
+    makeSut(false)
+    const passwordInput = screen.getByTestId('password')
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
+    fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
+    const submitButton = screen.getByTestId('submit-button')
+    fireEvent.click(submitButton)
+    const spinner = screen.getByTestId('spinner')
+    expect(spinner).toBeTruthy()
+  })
+
 })
