@@ -14,13 +14,14 @@ type Props = {
 
 const Login: React.FC<Props> = ({ validation }: Props) => {
 
-  const makeValidationResult = (hasError = false, errorMessage = ''): ValidationResult => ({
+  const makeValidationResult = (hasError: boolean = undefined, errorMessage = ''): ValidationResult => ({
     hasError,
     errorMessage
   })
 
   const [ displayError, setDisplayError] = useState(false)
   const [ displaySpinner, setDisplaySpinner] = useState(false)
+  const [ disabledSubmitButton, setDisabledSubmitButton] = useState(true)
 
   const [ emailInput, setEmailInput] = useState('')
   const [ passwordInput, setPasswordInput] = useState('')
@@ -37,17 +38,28 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     setPasswordInput((currentValue: string) => event.target.value)
   } 
 
+  const cleanValidation = (setStateValidation: React.Dispatch<React.SetStateAction<ValidationResult>>, validationResult: ValidationResult) => {
+    return () => {
+      setStateValidation(validationResult)
+      setDisabledSubmitButton(passwordValidation.hasError && emailValidation.hasError)
+    }
+  }
+
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('email', emailInput)
     
-    return () => setEmailValidation(makeValidationResult(hasError, errorMessage))
+    return cleanValidation(setEmailValidation, makeValidationResult(hasError, errorMessage))
   }, [emailInput])
 
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('password', passwordInput)
     
-    return () => setPasswordValidation(makeValidationResult(hasError, errorMessage))
+    return cleanValidation(setPasswordValidation, makeValidationResult(hasError, errorMessage))
   }, [passwordInput])
+
+  // useEffect(() => {
+  //   return () => setDisabledSubmitButton(passwordValidation.hasError && emailValidation.hasError)
+  // }, [passwordInput, emailInput])
 
   return (
     <div className={Styles.login}>
@@ -60,7 +72,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
           placeholder="Digite seu e-mail" 
           value={emailInput}
           onChange={handleChangeEmail}
-          hasError={emailValidation.hasError}
+          hasError={emailValidation.hasError || false}
           errorMessage={emailValidation.errorMessage}
         />
         <InputWithValidation 
@@ -69,13 +81,13 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
           placeholder="Digite sua senha" 
           value={passwordInput}
           onChange={handleChangePassword}
-          hasError={passwordValidation.hasError}
+          hasError={passwordValidation.hasError || false}
           errorMessage={passwordValidation.errorMessage}
         />
         <button 
           data-testid="submit-button"
           type="submit"
-          disabled
+          disabled={disabledSubmitButton}
           className={Styles.submit}
         >
           Entrar

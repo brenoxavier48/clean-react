@@ -101,4 +101,14 @@ describe('Login component', () => {
     expect(passwordStatus.textContent).toBe('')
   })
 
+  test('Should enable submit button if validation pass', async () => {
+    makeSut(false)
+    const passwordInput = screen.getByTestId('password')
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
+    fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
+    const submitButton = screen.getByTestId('submit-button')
+    expect(submitButton).toBeEnabled()
+  })
+
 })
