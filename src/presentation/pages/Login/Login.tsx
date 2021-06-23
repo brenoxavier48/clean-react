@@ -7,12 +7,14 @@ import {
   FormStatus, 
   Footer 
 } from '@/presentation/components'
+import { Authentication } from '@/domain/usecases/authentication'
 
 type Props = {
-  validation: Validation
+  validation: Validation,
+  authentication: Authentication
 }
 
-const Login: React.FC<Props> = ({ validation }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
 
   const makeValidationResult = (hasError: boolean = undefined, errorMessage = ''): ValidationResult => ({
     hasError,
@@ -31,19 +33,22 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
 
   
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailInput((currentValue: string) => event.target.value)
+    setEmailInput(event.target.value)
   } 
 
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordInput((currentValue: string) => event.target.value)
+    setPasswordInput(event.target.value)
   } 
 
-  const handleSubmitClick = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
     setDisplaySpinner(true)
+    const accountModel = await authentication.auth({
+      email: emailInput,
+      password: passwordInput
+    })
   } 
-
+ 
   const cleanValidationEffectFactory = (
     setStateValidation: React.Dispatch<React.SetStateAction<ValidationResult>>, 
     validationResult: ValidationResult
@@ -60,7 +65,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
 
   useEffect(() => {
     const { hasError, errorMessage } = validation.validate('password', passwordInput)
-    
+
     return cleanValidationEffectFactory(setPasswordValidation, makeValidationResult(hasError, errorMessage))
   }, [passwordInput])
 

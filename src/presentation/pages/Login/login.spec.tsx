@@ -2,21 +2,26 @@ import React from 'react'
 import faker from 'faker'
 import "@testing-library/jest-dom"
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
-import { ValidationSpy } from '@/presentation/test/'
+import { ValidationSpy, AuthenticationSpy } from '@/presentation/test/'
+import { Authentication } from '@/domain/usecases/authentication'
 import Login from './Login'
 
 type SutTypes = {
   sut: RenderResult
   validationSpy: ValidationSpy
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (validationHasError?: boolean): SutTypes => {
+  const authenticationSpy = new AuthenticationSpy()
   const validationSpy = new ValidationSpy()
   validationSpy.errorMessage = faker.random.words()
   validationSpy.hasError = validationHasError
+
   return {
-    sut: render(<Login validation={validationSpy}/>),
-    validationSpy
+    sut: render(<Login validation={validationSpy} authentication={authenticationSpy}/>),
+    validationSpy,
+    authenticationSpy
   }
 }
 
@@ -121,6 +126,22 @@ describe('Login component', () => {
     fireEvent.click(submitButton)
     const spinner = screen.getByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { authenticationSpy } = makeSut(true)
+    const password = faker.internet.password()
+    const email = faker.internet.email()
+    const passwordInput = screen.getByTestId('password')
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: email } })
+    fireEvent.input(passwordInput, { target: { value: password } })
+    const submitButton = screen.getByTestId('submit-button')
+    fireEvent.click(submitButton)
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 
 })
