@@ -42,6 +42,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
 
   const handleSubmitClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    
     setDisplaySpinner(true)
     const accountModel = await authentication.auth({
       email: emailInput,
