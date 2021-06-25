@@ -22,7 +22,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   })
 
   const [ displayError, setDisplayError] = useState(false)
-  const [ displaySpinner, setDisplaySpinner] = useState(false)
+  const [ isLoading, setIsLoading] = useState(false)
   const [ disabledSubmitButton, setDisabledSubmitButton] = useState(true)
 
   const [ emailInput, setEmailInput] = useState('')
@@ -43,8 +43,9 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   const handleSubmitClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     
-    setDisplaySpinner(true)
-    const accountModel = await authentication.auth({
+    setIsLoading(true)
+    
+    const accountModel = isLoading ? null : await authentication.auth({
       email: emailInput,
       password: passwordInput
     })
@@ -107,7 +108,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
             shouldDisplay: displayError,
             message: ''
           }}
-          displaySpinner={displaySpinner}
+          displaySpinner={isLoading}
         />
       </form>
       <Footer />
