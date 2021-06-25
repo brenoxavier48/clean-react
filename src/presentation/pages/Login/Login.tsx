@@ -43,9 +43,17 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   const handleSubmitClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     
-    setIsLoading(true)
+    if (isLoading || emailValidation.hasError || passwordValidation.hasError) {
+      console.log(emailInput)
+      console.log(isLoading)
+      console.log(emailValidation.hasError)
+      console.log(passwordValidation.hasError)
+      return
+    }
     
-    const accountModel = isLoading ? null : await authentication.auth({
+    setIsLoading(true)
+
+    const accountModel = await authentication.auth({
       email: emailInput,
       password: passwordInput
     })

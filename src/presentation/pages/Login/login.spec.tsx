@@ -126,7 +126,7 @@ describe('Login component', () => {
   })
 
   test('Should call Authentication with correct values', async () => {
-    const { authenticationSpy } = makeSut(true)
+    const { authenticationSpy } = makeSut(false)
     const password = faker.internet.password()
     const email = faker.internet.email()
     simulateValidSubmit(email, password)
@@ -137,12 +137,20 @@ describe('Login component', () => {
     })
   })
 
-  test('Should call Authentication only one time', async () => {
-    const { authenticationSpy } = makeSut(true)
+  test('Should call Authentication once', async () => {
+    const { authenticationSpy } = makeSut(false)
     simulateValidSubmit()
     simulateSubmitClick()
     simulateSubmitClick()
     expect(authenticationSpy.counterCall).toBe(1)
+  })
+
+  test('Should not call Authentication if form is not valid', async () => {
+    const { authenticationSpy } = makeSut(true)
+    populateEmailField('invalid')
+    populatePasswordField('invalid')
+    simulateSubmitClick()
+    expect(authenticationSpy.counterCall).toBe(0)
   })
 
 })
