@@ -22,7 +22,7 @@ const FormStatus: React.FC<Props> = ({ errorState, displaySpinner }: Props) => (
     }
     { 
       errorState.shouldDisplay 
-      && <span className={Styles.error}> { errorState.message } </span>
+      && <span className={Styles.error} data-testid="main-error">{ errorState.message }</span>
     }
   </div>
 )

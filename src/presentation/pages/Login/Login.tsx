@@ -16,12 +16,14 @@ type Props = {
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
 
-  const makeValidationResult = (hasError: boolean = undefined, errorMessage = ''): ValidationResult => ({
+  const makeValidationResult = (hasError: boolean = false, errorMessage = ''): ValidationResult => ({
     hasError,
     errorMessage
   })
 
-  const [ displayError, setDisplayError] = useState(false)
+  const [ hasMainError, setHasMainError] = useState(false)
+  const [ mainError, setMainError] = useState('')
+  
   const [ isLoading, setIsLoading] = useState(false)
   const [ disabledSubmitButton, setDisabledSubmitButton] = useState(true)
 
@@ -44,19 +46,20 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     event.preventDefault()
     
     if (isLoading || emailValidation.hasError || passwordValidation.hasError) {
-      console.log(emailInput)
-      console.log(isLoading)
-      console.log(emailValidation.hasError)
-      console.log(passwordValidation.hasError)
       return
     }
     
     setIsLoading(true)
 
-    const accountModel = await authentication.auth({
-      email: emailInput,
-      password: passwordInput
-    })
+    try {
+      const accountModel = await authentication.auth({
+        email: emailInput,
+        password: passwordInput
+      })
+    } catch(error) {
+      setHasMainError(true)
+      setMainError(error.message)
+    }
   } 
  
   const cleanValidationEffectFactory = (
@@ -90,7 +93,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
           placeholder="Digite seu e-mail" 
           value={emailInput}
           onChange={handleChangeEmail}
-          hasError={emailValidation.hasError || false}
+          hasError={emailValidation.hasError}
           errorMessage={emailValidation.errorMessage}
         />
         <InputWithValidation 
@@ -99,7 +102,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
           placeholder="Digite sua senha" 
           value={passwordInput}
           onChange={handleChangePassword}
-          hasError={passwordValidation.hasError || false}
+          hasError={passwordValidation.hasError}
           errorMessage={passwordValidation.errorMessage}
         />
         <button 
@@ -113,8 +116,8 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         <span className={Styles.link}>Criar conta</span>
         <FormStatus 
           errorState={{
-            shouldDisplay: displayError,
-            message: ''
+            shouldDisplay: hasMainError,
+            message: mainError
           }}
           displaySpinner={isLoading}
         />
