@@ -59,6 +59,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     } catch(error) {
       setHasMainError(true)
       setMainError(error.message)
+      setIsLoading(false)
     }
   } 
  

@@ -159,10 +159,10 @@ describe('Login component', () => {
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
     simulateValidSubmit()
     simulateSubmitClick()
-    const errorWraper = screen.getByTestId('error-wraper')
-    // waitFor(() => {})
     const mainError = await screen.findByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
+    const spinner = screen.queryByTestId('spinner')
+    expect(spinner).not.toBeTruthy()
   })
 
 })
