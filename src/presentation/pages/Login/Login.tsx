@@ -52,10 +52,11 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     setIsLoading(true)
 
     try {
-      const accountModel = await authentication.auth({
+      const { accessToken } = await authentication.auth({
         email: emailInput,
         password: passwordInput
       })
+      localStorage.setItem('accessToken', accessToken)
     } catch(error) {
       setHasMainError(true)
       setMainError(error.message)
@@ -86,7 +87,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   return (
     <div className={Styles.login}>
       <LoginHeader />
-      <form className={Styles.form} onSubmit={handleSubmitClick}>
+      <form className={Styles.form} onSubmit={handleSubmitClick} data-testid='login-form'>
         <h2>Login</h2>
         <InputWithValidation 
           type="email" 

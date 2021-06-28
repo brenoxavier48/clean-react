@@ -1,6 +1,7 @@
 import React from 'react'
 import faker from 'faker'
 import "@testing-library/jest-dom"
+import 'jest-localstorage-mock'
 import { render, RenderResult, screen, fireEvent, waitFor } from '@testing-library/react'
 import { ValidationSpy, AuthenticationSpy } from '@/presentation/test/'
 import { InvalidCredentialsError } from '@/domain/erros'
@@ -163,6 +164,14 @@ describe('Login component', () => {
     expect(mainError.textContent).toBe(error.message)
     const spinner = screen.queryByTestId('spinner')
     expect(spinner).not.toBeTruthy()
+  })
+
+  test('Should add accessTocken to localstorage on success', async () => {
+    const { authenticationSpy } = makeSut(false)
+    simulateValidSubmit()
+    simulateSubmitClick()
+    await waitFor(() => screen.getByTestId('login-form'))
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
   })
 
 })
