@@ -42,26 +42,39 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     setPasswordInput(event.target.value)
   } 
 
+  const getAccessToken = async (): Promise<string>  => {
+    const { accessToken } = await authentication.auth({
+      email: emailInput,
+      password: passwordInput
+    })
+    return accessToken
+  }
+
+  const setAccessTokenIntoLocalStorage = (accessToken: string) => {
+    localStorage.setItem('accessToken', accessToken)
+  }
+
+  const authenticationCatchError = (error: Error) => {
+    setHasMainError(true)
+    setMainError(error.message)
+  }
+
+  const authenticationTreatmentError = async () => {
+    try {
+      setAccessTokenIntoLocalStorage(await getAccessToken())
+    } catch(error) {
+      authenticationCatchError(error)
+    }
+  }
+
   const handleSubmitClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    
     if (isLoading || emailValidation.hasError || passwordValidation.hasError) {
       return
     }
-    
     setIsLoading(true)
-
-    try {
-      const { accessToken } = await authentication.auth({
-        email: emailInput,
-        password: passwordInput
-      })
-      localStorage.setItem('accessToken', accessToken)
-    } catch(error) {
-      setHasMainError(true)
-      setMainError(error.message)
-      setIsLoading(false)
-    }
+    await authenticationTreatmentError()
+    setIsLoading(false)
   } 
  
   const cleanValidationEffectFactory = (
