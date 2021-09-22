@@ -14,7 +14,7 @@ type Props = {
   authentication: Authentication
 }
 
-const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }) => {
 
   const makeValidationResult = (hasError: boolean = false, errorMessage = ''): ValidationResult => ({
     hasError,
